@@ -5,11 +5,9 @@ require "mailer"
 class DigestMailer < Mailer
 	unloadable
 
-	if Rails::VERSION::MAJOR >= 3
-		ActionMailer::Base.prepend_view_path(File.join(File.dirname(__FILE__), '../', 'views'))
-	else
-	self.instance_variable_get("@inheritable_attributes")[:view_paths] << RAILS_ROOT + "/vendor/plugins/redmine_digest/app/views"
-	end
+  Rails::VERSION::MAJOR >= 3 ?
+      ActionMailer::Base.prepend_view_path(File.join(File.dirname(__FILE__), '../', 'views')) :
+      self.instance_variable_get("@inheritable_attributes")[:view_paths] << RAILS_ROOT + "/vendor/plugins/redmine_digest/app/views"
 
 	#public :self.test
 	def self.test(user)
@@ -38,6 +36,7 @@ class DigestMailer < Mailer
 			@events = body[:events]
 			@events_by_day = body[:events_by_day]
 			@params = @body[:params]
+
 			mail(:to => recip_emails,
 				 :subject => subject)
 		else
