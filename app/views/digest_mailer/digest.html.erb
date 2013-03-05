@@ -40,9 +40,9 @@
 
               events_by_day_grouped = events_by_issue.group_by do |x|
                 if x.attributes.has_key? "tracker_id"
-                  x.tracker_id
+                  x.id
                 else
-                  x.issue.tracker_id
+                  x.issue.id
                 end
               end
 
