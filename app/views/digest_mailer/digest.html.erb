@@ -64,7 +64,7 @@
                   updated by <span class="author"><%= link_to e.event_author, user_path(e.event_author) if e.respond_to?(:event_author) %>.</span>
                   <% status = /#.*?\((.*?)\)/.match(format_activity_title(e.event_title)) %>
                   <%= unless status.nil?
-                        "Status changed to: #{status[1]}"
+                        "<b>Status changed to: #{status[1]}</b>"
                       end -%>
                 </dt>
                 <dd>
