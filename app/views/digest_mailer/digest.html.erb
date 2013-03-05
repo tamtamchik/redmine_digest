@@ -1,7 +1,11 @@
 <style>
-  .issue-closed {
-    color: #116611;
-  }
+  h1, h4 { margin: 1em 0; font-weight: bold !important; }
+  ul { margin: 0 !important; padding: 0 !important; }
+  li { list-style: none !important; }
+  .issue-wrapper { padding: 1em; border: 1px solid lightgray; border-top: 0px; }
+  .issue-wrapper h4 { margin-top: 0; }
+  .issue-wrapper.closed { background-color: #ccffcc; }
+  .issue-wrapper.first {border-top: 1px solid lightgray;}
 </style>
 
 <% if not @test_email.nil? -%>
@@ -18,16 +22,12 @@
 
 <h1>
   Activity
-    <span style="font-weight:normal;">
       (<%=
       @date_from == @date_to-1?
         format_date(@date_from) :
         l(:label_date_from_to, :start => format_date(@date_from), :end => format_date(@date_to-1)).downcase
       -%>)
-    </span>
 </h1>
-
-<p><%= link_to l(:label_activity_view_all), url_for(:controller => 'activities', :action => 'index', :only_path => false) %></p>
 
 <% if @events_by_day.blank? -%>
   <p><%= l(:label_no_data) %></p>
@@ -36,11 +36,11 @@
     <ul>
       <% @events_by_day.keys.sort.each do |day| %>
         <li>
-          <h3>
+          <h1>
             <%= format_date(day) unless day.nil? -%>
             <%= "Unknown date" if day.nil? -%>
-          </h3>
-          <dl>
+          </h1>
+
             <%
               events_by_issue = @events_by_day[day].select { |x| x.class == Issue or x.class == Journal }
 
@@ -52,16 +52,24 @@
                 end
               end
 
+              first_class = 'first'
+
               events_by_day_grouped.keys.sort.reverse.each do |i|
               issue = events_by_day_grouped[i].first
               unless issue.attributes.has_key? "tracker_id"
                 issue = issue.issue
               end
             -%>
-            <p>
-              <b><%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}",
-                           issue_path(issue) -%></b>
-            </p>
+            <div class="issue-wrapper <%= issue.status.name.downcase + ' ' + first_class %>">
+
+            <% unless first_class.blank?
+                 first_class = ''
+               end %>
+
+            <h4>
+              <%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}",
+                           issue_path(issue) -%>
+            </h4>
 
             <% events_by_day_grouped[i].sort {|x,y| x.event_datetime <=> y.event_datetime }.each do |e| -%>
               <div class="event">
@@ -78,9 +86,9 @@
                   <%= textilizable e.event_description %>
                 </dd>
               </div>
-            <% end
-            end -%>
-          </dl>
+            <% end -%>
+            </div>
+            <% end -%>
         </li>
       <% end -%>
     </ul>
