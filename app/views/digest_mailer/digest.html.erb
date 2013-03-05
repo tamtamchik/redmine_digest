@@ -1,79 +1,82 @@
 <% if not @test_email.nil? -%>
-    <h3>Test email</h3>
-    <pre>
-        date_to  : <%= @date_to %>
-        date_from: <%= @date_from %>
-        days     : <%= @days %>
-        start    : <%= @start %>
-        now      : <%= Time.now %>
-        today    : <%= Time.now.to_date %>
+  <h3>Test email</h3>
+  <pre>
+    date_to  : <%= @date_to %>
+    date_from: <%= @date_from %>
+    days     : <%= @days %>
+    start    : <%= @start %>
+    now      : <%= Time.now %>
+    today    : <%= Time.now.to_date %>
     </pre>
 <% end -%>
 
 <h1>
-    Activity
+  Activity
     <span style="font-weight:normal;">
-        (<%=
-            @date_from == @date_to-1?
-                format_date(@date_from) :
-                l(:label_date_from_to, :start => format_date(@date_from), :end => format_date(@date_to-1)).downcase
-        -%>)
+      (<%=
+      @date_from == @date_to-1?
+        format_date(@date_from) :
+        l(:label_date_from_to, :start => format_date(@date_from), :end => format_date(@date_to-1)).downcase
+      -%>)
     </span>
 </h1>
 
 <p><%= link_to l(:label_activity_view_all), url_for(:controller => 'activities', :action => 'index', :only_path => false) %></p>
 
 <% if @events_by_day.blank? -%>
-    <p><%= l(:label_no_data) %></p>
+  <p><%= l(:label_no_data) %></p>
 <% else -%>
-    <div id="activity">
-        <ul>
-        <% @events_by_day.keys.sort.each do |day| %>
-            <li>
-                <h3>
-                    <%= format_date(day) unless day.nil? -%>
-                    <%= "Unknown date" if day.nil? -%>
-                </h3>
-                <dl>
-                    <%
-                       events_by_day_grouped = @events_by_day[day].group_by do |x|
-                         if x.attributes.has_key? "tracker_id"
-                           x.tracker_id
-                         else
-                           x.issue.tracker_id
-                         end
-                       end
+  <div id="activity">
+    <ul>
+      <% @events_by_day.keys.sort.each do |day| %>
+        <li>
+          <h3>
+            <%= format_date(day) unless day.nil? -%>
+            <%= "Unknown date" if day.nil? -%>
+          </h3>
+          <dl>
+            <%
+              events_by_issue = @events_by_day[day].select { |x| x.class == Issue or x.class == Journal }
 
-                       events_by_day_grouped.keys.sort.reverse.each do |i|
-                         issue = events_by_day_grouped[i].first
-                         unless issue.attributes.has_key? "tracker_id"
-                           issue = issue.issue
-                         end
-                    -%>
-                      <p><%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}", issue_path(issue) -%></p>
+              events_by_day_grouped = events_by_issue.group_by do |x|
+                if x.attributes.has_key? "tracker_id"
+                  x.tracker_id
+                else
+                  x.issue.tracker_id
+                end
+              end
 
+              events_by_day_grouped.keys.sort.reverse.each do |i|
+              issue = events_by_day_grouped[i].first
+              unless issue.attributes.has_key? "tracker_id"
+                issue = issue.issue
+              end
+            -%>
+            <p>
+              <%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}", issue_path(issue) -%>
+            </p>
 
-                       <% events_by_day_grouped[i].sort {|x,y| x.event_datetime <=> y.event_datetime }.each do |e| -%>
-                            <div class="event">
-                                <dt class="<%= e.event_type %>">
-                                    <span class="time"><%= format_time(e.event_datetime, false) %></span>
-                                    updated by <span class="author"><%= link_to e.event_author, user_path(e.event_author) if e.respond_to?(:event_author) %>.</span>
-                                  <% status = /#.*?\((.*?)\)/.match(format_activity_title(e.event_title)) %>
-                                  <%= unless status.nil?
-                                        "Status changed to: #{status[1]}"
-                                      end -%>
-                                </dt>
-                                <dd>
-                                        <%= textilizable e.event_description %>
-                                </dd>
-                            </div>
-                    <% end
-                    end -%>
-                </dl>
-            </li>
-        <% end -%>
-        </ul>
-    </div>
+            <% events_by_day_grouped[i].sort {|x,y| x.event_datetime <=> y.event_datetime }.each do |e| -%>
+              <div class="event">
+                <dt class="<%= e.event_type %>">
+                  <span class="time"><%= format_time(e.event_datetime, false) %></span>
+                  updated by <span class="author"><%= link_to e.event_author, user_path(e.event_author) if e.respond_to?(:event_author) %>.</span>
+                  <% status = /#.*?\((.*?)\)/.match(format_activity_title(e.event_title)) %>
+                  <%= unless status.nil?
+                        "Status changed to: #{status[1]}"
+                      end -%>
+                </dt>
+                <dd>
+                  <%= textilizable e.event_description %>
+                </dd>
+              </div>
+            <% end
+            end -%>
+          </dl>
+        </li>
+      <% end -%>
+    </ul>
+  </div>
 
-    <p><%= link_to l(:label_activity_view_all), url_for(:controller => 'activities', :action => 'index', :only_path => false) %></p>
+  <p><%= link_to l(:label_activity_view_all), url_for(:controller => 'activities', :action => 'index', :only_path => false) %></p>
 <% end -%>
