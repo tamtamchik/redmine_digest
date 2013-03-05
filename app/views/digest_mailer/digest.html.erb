@@ -53,7 +53,8 @@
               end
             -%>
             <p>
-              <%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}", issue_path(issue) -%>
+              <b><%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}",
+                           issue_path(issue) -%></b>
             </p>
 
             <% events_by_day_grouped[i].sort {|x,y| x.event_datetime <=> y.event_datetime }.each do |e| -%>
