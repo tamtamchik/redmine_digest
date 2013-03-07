@@ -77,7 +77,7 @@ class DigestMailer < Mailer
 		params["show_documents"] = 1
 		params["show_files"] = 1
 		params["show_wiki_edits"] = 1
-		user = User.find(:all, :conditions => ["admin='1'"]).first
+		user = User.find(:all, :conditions => ["admin='t'"]).first
 		dbg "Warning: Could not find an admin user. Some events might not be visible to the anonymous user" if user.nil?
 		activity = Redmine::Activity::Fetcher.new(user, :project => project,
 			:with_subprojects => with_subprojects)
@@ -161,10 +161,10 @@ class DigestMailer < Mailer
 		default = Setting.plugin_redmine_digest[:default_account_enabled]
 		default = default.nil? ? true : default
 		dbg "Default setting for whether digest is active for users: %s" % default.to_s
-		members = Member.find(:all, :conditions => ["project_id = " + project[:id].to_s]).each { |m|
+		members = Member.find(:all, :conditions => ["project_id = " + project.id.to_s]).each { |m|
 			user = m.user
-			puts "Found user %s" % user.id
 			if user && user.active? && user.mail
+				dbg "Found user %s" % user
 				if user.digest_account.nil?
 					active = default
 				else
