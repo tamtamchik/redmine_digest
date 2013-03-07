@@ -38,10 +38,13 @@ namespace :redmine do
 	task :send_digest, :environment, :project, :start, :days, :debugging_messages do |t, args|
 		if Rails::VERSION::MAJOR >= 3
 			env = Rails.env
+			if env.kind_of?(ActiveSupport::StringInquirer)
+				env = {}
+				env['environment'] = Rails.env
+			end
 		else
 			env = ENV
 		end
-		
 		options = {}
 		args.with_defaults(:project => nil, :start => nil, :days => nil, :environment => "production")
 		env['environment'] = args[:environment]
