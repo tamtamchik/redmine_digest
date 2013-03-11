@@ -1,8 +1,3 @@
-This plugin provides email alerts when an issue had not been updated
-since a certain time.
-
-Created by Emmanuel Bretelle 
-
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
