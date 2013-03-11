@@ -1,6 +1,6 @@
 = Digest
 
-==NOTE to upgraders from 0.0.1: You MUST perform db:migrate_plugins after upgrading!!!
+<b>The main difference here, from original one, is that in this fork activities in the email are grouped by issues. So you can see changes in the issue clearly.</b>
 
 This plugin sends email digests. A digest is a summary of a project's activity over a period of time. Each project is checked for activity during the specified period of time, and if there is new activity, an email is sent to each user who has opted to receive the digest.
 
