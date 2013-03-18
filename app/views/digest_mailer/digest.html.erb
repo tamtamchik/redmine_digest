@@ -68,14 +68,14 @@
 
             <h4>
               <%= link_to "#{issue.tracker} ##{issue.id}: #{truncate(issue.subject, :length => 60)}",
-                           issue_path(issue) -%>
+                           issue_path(issue, :only_path => false) -%>
             </h4>
 
             <% events_by_day_grouped[i].sort {|x,y| x.event_datetime <=> y.event_datetime }.each do |e| -%>
               <div class="event">
                 <dt class="<%= e.event_type %>">
                   <span class="time"><%= format_time(e.event_datetime, false) %></span>
-                  updated by <span class="author"><%= link_to e.event_author, user_path(e.event_author) if e.respond_to?(:event_author) %>.</span>
+                  updated by <span class="author"><%= link_to e.event_author, user_path(e.event_author, :only_path => false)if e.respond_to?(:event_author) %>.</span>
                   <b><% status = /#.*?\((.*?)\):/.match(format_activity_title(e.event_title)) %>
                   <%= unless status.nil?
                     "Status changed to: #{status[1]}"
