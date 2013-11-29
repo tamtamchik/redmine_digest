@@ -98,17 +98,17 @@ class DigestMailer < Mailer
 		logger.error "Record not found!"
 		#render_404
 	end
-  
+
 	def self.debug_events(events)
 		return unless Setting.plugin_redmine_digest[:debugging_messages] || @debugging
 		if events.blank?
-			puts "No events found" 
+			puts "No events found"
 			return
 		end
 		#puts "events.first.inspect: %s" % events.first.inspect
 		puts
 		puts "========================================"
-		
+
 		events_by_day = events.group_by(&:event_date)
 		if events_by_day.blank?
 			puts "Attempt to group by date resulted in no groups"
@@ -126,7 +126,7 @@ class DigestMailer < Mailer
 		end
 		puts
 	end
-  
+
 	# Get all projects found with the plugin enabled or just the project specified
 	def self.get_projects(project)
 		projects = []
@@ -137,7 +137,7 @@ class DigestMailer < Mailer
 				log "No projects were found in the environment or no projects have digest enabled."
 				return
 			end
-			condition = "id IN (" + p.join(",") + ")" 
+			condition = "id IN (" + p.join(",") + ")"
 			projects = Project.find(:all, :conditions => [condition])
 			if projects.empty?
 				log "Could not find matching project."
@@ -145,7 +145,7 @@ class DigestMailer < Mailer
 			dbg "Found %i digestable projects out of %i total projects." % [projects.length, p.length]
 		else
 			dbg "Checking project '%s'" % project
-			projects = Project.find(:all, 
+			projects = Project.find(:all,
 				:conditions => ["id='%s' or identifier='%s'" % [project, project]])
 			if projects.length == 0
 				log "The specified project '%s' was not found." % [project]
@@ -154,14 +154,21 @@ class DigestMailer < Mailer
 		dbg "Projects to process: %s" % projects.join(", ")
 		return projects
 	end
-  
+
 	def self.get_recipients(project)
 		recipients = []
 		default = Setting.plugin_redmine_digest[:default_account_enabled]
 		default = default.nil? ? true : default
 		dbg "Default setting for whether digest is active for users: %s" % default.to_s
-		members = Member.find(:all, :conditions => ["project_id = " + project.id.to_s]).each { |m|
+		members = Member.find(:all, :conditions => { :project_id => project[:id] }).each { |m|
 			user = m.user
+
+			# Skip groups
+			if user.nil?
+				next
+			end
+
+			puts "Found user %s" % user.id
 			if user && user.active? && user.mail
 				dbg "Found user %s" % user
 				if user.digest_account.nil?
@@ -175,7 +182,7 @@ class DigestMailer < Mailer
 		dbg "Found %i digest recipients out of %i project members/groups." % [recipients.length, members.length]
 		return recipients
 	end
-  
+
 	def self.digests(options={})
 		start_default = Setting.plugin_redmine_digest[:start_default].to_i
 		days_default = Setting.plugin_redmine_digest[:days_default].to_i
@@ -193,7 +200,7 @@ class DigestMailer < Mailer
 		projects.each do |project|
 			dbg ""
 			log "** Processing project '%s'..." % project.name
-			
+
 			body = {
 				:project => project,
 				:start => start,
@@ -225,7 +232,7 @@ class DigestMailer < Mailer
 				message = "Email delivery failed for project '%s'" % project.name
 			elsif not email.respond_to?('subject')
 				if email.is_a? String
-					message = email 
+					message = email
 				else
 					message = "The email does not have a subject, so it is assumed something went wrong."
 				end
@@ -244,16 +251,16 @@ class DigestMailer < Mailer
 			logger.error e.message, e.backtrace unless logger.nil?
 		end
 	end
-	
+
 	def dbg(message)
 		DigestMailer.dbg message
 	end
-	
+
 	def self.dbg(message)
 		if Setting.plugin_redmine_digest[:debugging_messages] || @debugging
 			puts message
 			logger.info(message) unless logger.nil?
-		else	
+		else
 			puts "debugging_messages: %s" % Setting.plugin_redmine_digest[:debugging_messages]
 			logger.info("debugging_messages: %s" % Setting.plugin_redmine_digest[:debugging_messages]) unless logger.nil?
 		end
@@ -268,11 +275,11 @@ class DigestMailer < Mailer
 		return logger unless logger.nil?
 		#ActionController::Base::logger
 	end
-	
+
 	def log(info_message)
 		DigestMailer.log(info_message)
 	end
-	
+
 	def self.log(info_message)
 		if Setting.plugin_redmine_digest[:debugging_messages] || @debugging
 			puts info_message
