@@ -160,6 +160,7 @@ class DigestMailer < Mailer
 		default = Setting.plugin_redmine_digest[:default_account_enabled]
 		default = default.nil? ? true : default
 		dbg "Default setting for whether digest is active for users: %s" % default.to_s
+
 		members = Member.find(:all, :conditions => { :project_id => project[:id] }).each { |m|
 			user = m.user
 
