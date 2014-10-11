@@ -6,6 +6,10 @@ zh:
   label_active: 给我发送项目摘要邮件
   
   mail_body_digest: "[%{project}] 项目活动： %{count} 事务"
+  mail_body_activity: Activity
+  mail_body_unknown_date: Unknown date
+  mail_body_updated_by: updated by
+  mail_body_status_changed: "Status changed to:"
   mail_subject_digest: "[%{project}] 项目活动： %{count} 事务"
   
   digest_days: 包含 ... 日

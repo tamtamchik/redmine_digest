@@ -21,7 +21,7 @@
 <% end -%>
 
 <h1>
-  Activity
+  <%= l(:mail_body_activity) %>
       (<%=
       @date_from == @date_to-1?
         format_date(@date_from) :
@@ -38,7 +38,7 @@
         <li>
           <h1>
             <%= format_date(day) unless day.nil? -%>
-            <%= "Unknown date" if day.nil? -%>
+            <%= l(:mail_body_unknown_date) if day.nil? -%>
           </h1>
 
             <%
@@ -75,10 +75,10 @@
               <div class="event">
                 <dt class="<%= e.event_type %>">
                   <span class="time"><%= format_time(e.event_datetime, false) %></span>
-                  updated by <span class="author"><%= link_to e.event_author, user_path(e.event_author, :only_path => false)if e.respond_to?(:event_author) %>.</span>
+                  <%= l(:mail_body_updated_by) %> <span class="author"><%= link_to e.event_author, user_path(e.event_author, :only_path => false)if e.respond_to?(:event_author) %>.</span>
                   <b><% status = /#.*?\((.*?)\):/.match(format_activity_title(e.event_title)) %>
                   <%= unless status.nil?
-                    "Status changed to: #{status[1]}"
+                    l(:mail_body_status_changed) + " #{status[1]}"
                   end -%>
                   </b>
                 </dt>

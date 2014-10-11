@@ -6,6 +6,10 @@ en:
   label_active: Send me digest emails
   
   mail_body_digest: "[%{project}] Activity: %{count} events"
+  mail_body_activity: Activity
+  mail_body_unknown_date: Unknown date
+  mail_body_updated_by: updated by
+  mail_body_status_changed: "Status changed to:"
   mail_subject_digest: "[%{project}] Activity: %{count} events"
   
   digest_days: Days to include
