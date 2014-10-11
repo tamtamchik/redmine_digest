@@ -5,8 +5,10 @@
   .issue-wrapper { padding: 1em; border: 1px solid lightgray; border-top: 0px; }
   .issue-wrapper h4 { margin-top: 0; }
   .issue-wrapper.closed { background-color: #ccffcc; }
-  .issue-wrapper.first {border-top: 1px solid lightgray;}
-  .event {margin-top: 0.7em;}
+  .issue-wrapper.first { border-top: 1px solid lightgray; }
+  .event { margin-top: 0.7em; }
+  .edit-title { margin: 0; }
+  .edit-body { margin: 0.2em 0 0 1.5em; }
 </style>
 
 <% if not @test_email.nil? -%>
@@ -74,7 +76,7 @@
 
             <% events_by_day_grouped[i].sort {|x,y| x.event_datetime <=> y.event_datetime }.each do |e| -%>
               <div class="event">
-                <dt class="<%= e.event_type %>">
+                <p class="edit-title <%= e.event_type %>">
                   <span class="time"><%= format_time(e.event_datetime, false) %></span>
                   <%= l(:mail_body_updated_by) %> <span class="author"><%= link_to e.event_author, user_path(e.event_author, :only_path => false)if e.respond_to?(:event_author) %>.</span>
                   <b><% status = /#.*?\((.*?)\):/.match(format_activity_title(e.event_title)) %>
@@ -82,10 +84,10 @@
                     l(:mail_body_status_changed) + " #{status[1]}"
                   end -%>
                   </b>
-                </dt>
-                <dd>
+                </p>
+                <div class="edit-body">
                   <%= textilizable e.event_description %>
-                </dd>
+                </div>
               </div>
             <% end -%>
             </div>
