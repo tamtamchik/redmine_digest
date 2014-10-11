@@ -16,8 +16,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 if Rails::VERSION::MAJOR < 3
-	require 'rdoc/markup/simple_markup'
-	require 'rdoc/markup/simple_markup/to_html'
+	begin
+		require 'rdoc/markup/simple_markup'
+		require 'rdoc/markup/simple_markup/to_html'
+	rescue LoadError
+		require 'rdoc/markup'
+		require 'rdoc/markup/to_html'
+	end
 else
 	require 'rdoc'
 end
