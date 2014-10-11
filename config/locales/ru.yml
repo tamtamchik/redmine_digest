@@ -9,7 +9,7 @@ ru:
   mail_body_activity: Активность
   mail_body_unknown_date: Дата неизвестна
   mail_body_updated_by: обновлено пользователем
-  mail_body_status_changed: "Status changed to:"
+  mail_body_status_changed: "Статус изменился на:"
   mail_subject_digest: "[%{project}] Активность: %{count} событий"
 
   digest_days: Сколько дней включать
