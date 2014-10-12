@@ -79,10 +79,12 @@
                 <p class="edit-title <%= e.event_type %>">
                   <span class="time"><%= format_time(e.event_datetime, false) %></span>
                   <%= l(:mail_body_updated_by) %> <span class="author"><%= link_to e.event_author, user_path(e.event_author, :only_path => false)if e.respond_to?(:event_author) %>.</span>
-                  <b><% status = /#.*?\((.*?)\):/.match(format_activity_title(e.event_title)) %>
+                  <b><% if e.is_a?(Journal) && e.details.any?{|a| a.prop_key == "status_id"} -%>
+                  <% status = /#.*?\((.*?)\):/.match(format_activity_title(e.event_title)) -%>
                   <%= unless status.nil?
                     l(:mail_body_status_changed) + " #{status[1]}"
                   end -%>
+                  <% end -%>
                   </b>
                 </p>
                 <div class="edit-body">
