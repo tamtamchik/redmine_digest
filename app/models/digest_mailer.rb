@@ -47,8 +47,8 @@ class DigestMailer < Mailer
 				subject l(:mail_subject_digest, :project => project, :count => body[:events].size, :days => days )
 			end
 			content_type "multipart/alternative"
-			part :content_type => "text/plain", :body => render_message("digest.html.erb", body)
-			part :content_type => "text/html", :body => render_message("digest.text.erb", body)
+			part :content_type => "text/plain", :body => render_message("digest.text.erb", body)
+			part :content_type => "text/html", :body => render_message("digest.html.erb", body)
 		end
 		log 'Email sent.'
 	end

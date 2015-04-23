@@ -1,0 +1,33 @@
+ru:
+# Russian translation
+  label_digest_account_settings: Дайджесты
+  label_digest_account_description: Дайджест - это сводка активности проекта за период времени, отсылаемая отдельным письмом для каждого проекта.
+  label_digest_default_account_enabled: Настройка по-умолчанию для пользователей
+  label_active: Посылать мне дайджесты по почте
+
+  mail_body_digest: "[%{project}] Активность: %{count} событий"
+  mail_body_activity: Активность
+  mail_body_unknown_date: Дата неизвестна
+  mail_body_updated_by: обновлено пользователем
+  mail_body_status_changed: "Статус изменился на:"
+  mail_subject_digest: "[%{project}] Активность: %{count} событий"
+
+  digest_days: Сколько дней включать
+  digest_start: За сколько дней назад начинать
+  start_explanation: 0 = сегодня, 1 = начинать со вчера, 7 = начинать неделю назад
+  days: "дней"
+  label_activity_view_all: Посмотреть всю активность
+  label_example: Примеры
+  label_note: Примечания
+  label_note_text: Аргументы командной строки для rake-задачи, если они заданы, переназначают данные настройки
+  label_example_text: "Часть Readme \"Использование и примеры\" содержит несколько практических советов"
+  label_send_test_email: Отправить тестовое письмо на мою электронную почту
+  label_send_all_digests: Отправить дайджесты по всем проектам, у которых включён дайджест
+  label_apply_changes_first: Необходимо применить настройки перед отправкой писем
+  label_output_extra_messages: Выводить дополнительные сообщения (в консоль и журнал)
+
+  notice_digest_sent_to: "Дайджест был отправлен для %{value}."
+  notice_digests_sent: Письма с дайджестами были отправлены.
+  notice_digest_error: "Произошла ошибка во время отправки дайджеста (%{value})"
+
+  field_active: Отправлять мне дайджесты

@@ -7,6 +7,10 @@ de:
   label_active: Aktiv
   
   mail_body_digest: "[%{project}] Aktivitäten: %{count} Ereignisse"
+  mail_body_activity: Activity
+  mail_body_unknown_date: Unknown date
+  mail_body_updated_by: updated by
+  mail_body_status_changed: "Status changed to:"
   mail_subject_digest: "[%{project}] Aktivitäten: %{count} Ereignisse"
   
   digest_days: Anzahl der Tage für den Bericht
